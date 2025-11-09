@@ -1,0 +1,21 @@
+Curate a set of at least 100 QA pairs and 50 supporting documents. Your main target questions are the ones that models cannot answer without retrieval.
+You can manually create all of them or synthesize them with LLMs.
+
+Requirement:
+Include the following question types at least 20 QA pairs for each: multiple choice, factoid (words/short phrase), list (multiple possible answers/instructions)
+Try to create questions that cannot be answered without retrieval, as much as possible.
+Create a diverse set of questions so that they need as many distinct documents as possible in your document collection.
+Deliverable:
+Create a data folder, data, and put the following files, data/question.tsv, data/answer.tsv, data/evidence.tsv, and your supporting documents under data/corpus/*
+
+Format:
+question.tsv (one question per line)
+
+<question 1>\t<question type>
+answer.tsv (tab-separated answers, each line for the corresponding question)
+
+<anwer 1-1>\t<answer 1-2>\t...
+evidence.tsv
+
+<original url 1>\t<filename 1>
+Files under data/corpus/ can be of any type, e.g., .txt, .pdf, .md, etc.
