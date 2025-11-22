@@ -1,6 +1,9 @@
 import os
 import argparse
+import signal
+import threading
 from typing import List, Tuple, Optional
+from functools import wraps
 
 from langchain_community.document_loaders import DirectoryLoader, TextLoader
 from langchain_text_splitters import RecursiveCharacterTextSplitter
@@ -138,26 +141,84 @@ class LangChainBM25Retriever:
         return results
 
 
+def timeout_handler(timeout_seconds=120):
+    """Decorator to add timeout to function calls"""
+    def decorator(func):
+        @wraps(func)
+        def wrapper(*args, **kwargs):
+            result = [None]
+            exception = [None]
+            
+            def target():
+                try:
+                    result[0] = func(*args, **kwargs)
+                except Exception as e:
+                    exception[0] = e
+            
+            thread = threading.Thread(target=target)
+            thread.daemon = True
+            thread.start()
+            thread.join(timeout=timeout_seconds)
+            
+            if thread.is_alive():
+                raise TimeoutError(f"Function call exceeded {timeout_seconds} seconds")
+            
+            if exception[0]:
+                raise exception[0]
+            
+            return result[0]
+        return wrapper
+    return decorator
+
+
 class QAGenerator:
     """Generator using LangChain with different LLMs"""
     
-    def __init__(self, llm_type: str = "gemini"):
+    def __init__(self, llm_type: str = "llama"):
         self.llm_type = llm_type
         
         # Initialize LLM
-        if llm_type == "gemini":
+        if llm_type == "llama":
             print("Initializing LLM...")
-            self.llm = ChatGoogleGenerativeAI(
-                model = "gemini-1.5-flash-002",
-                api_key = config.get('openai', 'cmu_gemoni_key'),
-                base_url=config.get('openai', 'base_url')    
-            )
+            try:
+                self.llm = ChatOpenAI(
+                    model="llama3-2-11b-instruct",
+                    api_key=config.get('openai', 'openai_api_key'),
+                    base_url=config.get('openai', 'base_url'),
+                    request_timeout=120,  # 120 second timeout
+                    max_retries=2
+                )
+                print(f"  Model: llama3-2-11b-instruct")
+                print(f"  Base URL: {config.get('openai', 'base_url')}")
+            except TypeError:
+                # Fallback if request_timeout is not supported
+                self.llm = ChatOpenAI(
+                    model="llama3-2-11b-instruct",
+                    api_key=config.get('openai', 'openai_api_key'),
+                    base_url=config.get('openai', 'base_url')
+                )
+                print(f"  Model: llama3-2-11b-instruct (no timeout)")
+                print(f"  Base URL: {config.get('openai', 'base_url')}")
         else:
-            self.llm = ChatOpenAI(
-            model="gpt-4o-mini-2024-07-18",
-            api_key=config.get('openai', 'openai_api_key'),
-            base_url=config.get('openai', 'base_url')
-        )
+            try:
+                self.llm = ChatOpenAI(
+                    model="gpt-4o-mini-2024-07-18",
+                    api_key=config.get('openai', 'openai_api_key'),
+                    base_url=config.get('openai', 'base_url'),
+                    request_timeout=120,  # 120 second timeout
+                    max_retries=2
+                )
+                print(f"  Model: gpt-4o-mini-2024-07-18")
+                print(f"  Base URL: {config.get('openai', 'base_url')}")
+            except TypeError:
+                # Fallback if request_timeout is not supported
+                self.llm = ChatOpenAI(
+                    model="gpt-4o-mini-2024-07-18",
+                    api_key=config.get('openai', 'openai_api_key'),
+                    base_url=config.get('openai', 'base_url')
+                )
+                print(f"  Model: gpt-4o-mini-2024-07-18 (no timeout)")
+                print(f"  Base URL: {config.get('openai', 'base_url')}")
         
         self.rag_prompt = PromptTemplate(
             input_variables=["context", "question"],
@@ -224,23 +285,35 @@ Answer:"""
     def generate_with_retrieval(self, question: str, qa_chain) -> Tuple[str, Optional[str]]:
         """Generate answer using retrieval chain"""
         try:
-            result = qa_chain.invoke({"query": question})
-            answer = result['result'].strip()
+            print(f"    Calling LLM API...", end='', flush=True)
             
-            # Extract source information
-            source_docs = result.get('source_documents', [])
-            if source_docs:
-                doc_info = []
-                for doc in source_docs:
-                    filename = doc.metadata.get('filename', 'unknown')
-                    doc_info.append(f"{filename}:1.0000")
-                additional_info = "|".join(doc_info)
-            else:
-                additional_info = None
+            # Wrap the invoke call with timeout
+            @timeout_handler(timeout_seconds=120)
+            def call_qa_chain():
+                return qa_chain.invoke({"query": question})
             
-            return answer, additional_info
+            try:
+                result = call_qa_chain()
+                print(" ✓", flush=True)
+                answer = result['result'].strip()
+                
+                # Extract source information
+                source_docs = result.get('source_documents', [])
+                if source_docs:
+                    doc_info = []
+                    for doc in source_docs:
+                        filename = doc.metadata.get('filename', 'unknown')
+                        doc_info.append(f"{filename}:1.0000")
+                    additional_info = "|".join(doc_info)
+                else:
+                    additional_info = None
+                
+                return answer, additional_info
+            except TimeoutError as te:
+                print(f" ✗ Timeout: {te}", flush=True)
+                return "Error: Request timed out", None
         except Exception as e:
-            print(f"Error generating answer: {e}")
+            print(f" ✗ Error: {e}", flush=True)
             return "Error generating response", None
     
     def generate_without_retrieval(self, question: str) -> str:
@@ -249,10 +322,22 @@ Answer:"""
             from langchain_core.output_parsers import StrOutputParser
 
             chain = self.no_context_prompt | self.llm | StrOutputParser()
-            answer = chain.invoke({"question": question})
-            return answer.strip()
+            print(f"    Calling LLM API...", end='', flush=True)
+            
+            # Wrap the invoke call with timeout
+            @timeout_handler(timeout_seconds=120)
+            def call_llm():
+                return chain.invoke({"question": question})
+            
+            try:
+                answer = call_llm()
+                print(" ✓", flush=True)
+                return answer.strip()
+            except TimeoutError as te:
+                print(f" ✗ Timeout: {te}", flush=True)
+                return "Error: Request timed out"
         except Exception as e:
-            print(f"Error generating answer: {e}")
+            print(f" ✗ Error: {e}", flush=True)
             return "Error generating response"
 
 
@@ -321,7 +406,7 @@ def main():
     
     # Define combinations to test
     retrievers = ['None', 'vector', 'bm25']
-    generators = ['gemini', 'openai']
+    generators = ['llama', 'openai']
     
     # Loop over all combinations
     for retriever_type in retrievers:
@@ -346,6 +431,16 @@ def main():
             # Initialize generator
             generator = QAGenerator(llm_type=generator_type)
             
+            # Test connection with a simple call
+            print("Testing LLM connection...", end='', flush=True)
+            try:
+                test_chain = generator.no_context_prompt | generator.llm
+                test_result = test_chain.invoke({"question": "Say 'test'"})
+                print(" ✓ Connection successful\n", flush=True)
+            except Exception as e:
+                print(f" ✗ Connection test failed: {e}", flush=True)
+                print("  Continuing anyway...\n", flush=True)
+            
             # Create QA system
             qa_system = QASystem(retriever_wrapper, generator, use_retrieval)
             
@@ -355,16 +450,25 @@ def main():
             
             with open(output_file, 'w', encoding='utf-8') as f:
                 for i, (question, q_type) in enumerate(questions, 1):
-                    print(f"  [{i}/{len(questions)}] Processing: {question[:60]}...")
-                    answer, additional_info = qa_system.answer(question)
-                    
-                    # Clean answer for TSV format
-                    answer = answer.replace('\n', ' ').replace('\t', ' ')
-                    
-                    if additional_info:
-                        f.write(f"{answer}\t{additional_info}\n")
-                    else:
-                        f.write(f"{answer}\n")
+                    print(f"  [{i}/{len(questions)}] Processing: {question[:60]}...", flush=True)
+                    try:
+                        answer, additional_info = qa_system.answer(question)
+                        
+                        # Clean answer for TSV format
+                        answer = answer.replace('\n', ' ').replace('\t', ' ')
+                        
+                        if additional_info:
+                            f.write(f"{answer}\t{additional_info}\n")
+                        else:
+                            f.write(f"{answer}\n")
+                        f.flush()  # Ensure data is written immediately
+                    except KeyboardInterrupt:
+                        print("\n\nInterrupted by user. Exiting...")
+                        raise
+                    except Exception as e:
+                        print(f"    ✗ Unexpected error: {e}", flush=True)
+                        f.write("Error generating response\n")
+                        f.flush()
             
             print(f"✓ Results saved to {output_file}\n")
     
