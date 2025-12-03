@@ -1,11 +1,11 @@
 {
   "total": 100,
-  "exact_match": 41,
-  "partial_match": 46,
-  "no_match": 13,
-  "exact_match_rate": 0.41,
-  "partial_match_rate": 0.46,
-  "any_match_rate": 0.87,
+  "exact_match": 54,
+  "partial_match": 36,
+  "no_match": 10,
+  "exact_match_rate": 0.54,
+  "partial_match_rate": 0.36,
+  "any_match_rate": 0.9,
   "errors": [
     {
       "question": "In which year was the first book of Barbara Kimenye's 'Moses' series published?",
@@ -32,40 +32,40 @@
       "similarity": 0.75
     },
     {
-      "question": "In what year was Ngugi wa Thiong'o's book 'Decolonising the Mind' published?",
-      "predicted": "Information not found",
-      "gold": "1986",
-      "similarity": 0.0
-    },
-    {
       "question": "What is the title of Meja Mwangi's debut novel, published in 1974?",
       "predicted": "Carcase for Hounds",
       "gold": "Going Down River Road",
       "similarity": 0.3076923076923077
     },
     {
-      "question": "List books by Meja Mwangi that depict Nairobi's street children",
-      "predicted": "Meja Mwangi's books that depict Nairobi's street children are:  Kill Me Quick",
-      "gold": "'Kill Me Quick' (1973)",
-      "similarity": 0.2765957446808511
-    },
-    {
       "question": "What is the title of Ngugi wa Thiong'o's semi-autobiographical novel?",
-      "predicted": "Ngugi wa Thiong'o's memoir trilogy includes 'Dreams in a Time of War,' 'In the House of the Interpreter,' and 'Birth of a Dream Weaver.'",
+      "predicted": "Dreams in a Time of War",
       "gold": "Caitaani Muthoni",
-      "similarity": 0.1111111111111111
-    },
-    {
-      "question": "Which of the following writers made a shift to writing in their indigenous language, Gikuyu?",
-      "predicted": "Ngugi wa Thiong'o made a shift to writing in his indigenous language, Gikuyu.",
-      "gold": "Ngugi wa Thiong'o, with his first novel 'Weep Not, Child'",
-      "similarity": 0.5076923076923077
+      "similarity": 0.15384615384615385
     },
     {
       "question": "In what year was Okot p'Bitek's most famous work 'Song of Lawino' published?",
       "predicted": "1966",
       "gold": "1965",
       "similarity": 0.75
+    },
+    {
+      "question": "In what year was Meja Mwangi's novel 'Going Down River Road' published?",
+      "predicted": "1976",
+      "gold": "1973",
+      "similarity": 0.75
+    },
+    {
+      "question": "What are some notable works by Ngugi wa Thiong'o?",
+      "predicted": "Weep Not, Child, The River Between, A Grain of Wheat, Petals of Blood, Devil on the Cross, Matigari, Wizard of the Crow, Dreams in a Time of War, In the House of the Interpreter, Birth of a Dream Weaver",
+      "gold": "Decolonising the Mind",
+      "similarity": 0.09865470852017937
+    },
+    {
+      "question": "In what year was Meja Mwangi awarded the Jomo Kenyatta Prize for Literature?",
+      "predicted": "1973",
+      "gold": "2008",
+      "similarity": 0.0
     }
   ]
 }

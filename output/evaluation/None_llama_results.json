@@ -1,28 +1,22 @@
 {
   "total": 100,
-  "exact_match": 1,
-  "partial_match": 33,
-  "no_match": 66,
-  "exact_match_rate": 0.01,
-  "partial_match_rate": 0.33,
-  "any_match_rate": 0.34,
+  "exact_match": 29,
+  "partial_match": 17,
+  "no_match": 54,
+  "exact_match_rate": 0.29,
+  "partial_match_rate": 0.17,
+  "any_match_rate": 0.46,
   "errors": [
     {
       "question": "In which year was the first book of Barbara Kimenye's 'Moses' series published?",
-      "predicted": "Information not found",
+      "predicted": "1965",
       "gold": "1967",
-      "similarity": 0.0
+      "similarity": 0.75
     },
     {
       "question": "In what year did Grace Ogot's short story 'The Year of Sacrifice' appear in Black Orpheus?",
       "predicted": "Information not found",
       "gold": "1963",
-      "similarity": 0.0
-    },
-    {
-      "question": "In what year was Yolande Mukagasana's autobiographical book 'La Mort ne veut pas de moi' published?",
-      "predicted": "Information not found",
-      "gold": "1997",
       "similarity": 0.0
     },
     {
@@ -32,16 +26,10 @@
       "similarity": 0.0
     },
     {
-      "question": "In what year did Grace Ogot's novel 'The Promised Land' appear?",
-      "predicted": "Information not found",
-      "gold": "1966",
-      "similarity": 0.0
-    },
-    {
       "question": "In what year did Grace Ogot's short story collection 'Land Without Thunder' establish her reputation for powerful narratives rooted in African cosmology?",
-      "predicted": "Information not found",
+      "predicted": "1976",
       "gold": "1963",
-      "similarity": 0.0
+      "similarity": 0.75
     },
     {
       "question": "What year was Abdulrazak Gurnah's novel 'Paradise' shortlisted for the Booker Prize?",
@@ -57,15 +45,27 @@
     },
     {
       "question": "In what year was Yolande Mukagasana's autobiographical work 'La Mort ne veut pas de moi' published?",
-      "predicted": "Information not found",
+      "predicted": "2003",
       "gold": "1997",
       "similarity": 0.0
     },
     {
       "question": "What was the title of Ngugi wa Thiong'o's novel written in Gikuyu language while he was detained?",
-      "predicted": "Caitani Mithikari (also known as Detained).",
+      "predicted": "Caitani Mutharaba-ini",
       "gold": "Matigari",
-      "similarity": 0.19607843137254902
+      "similarity": 0.3448275862068966
+    },
+    {
+      "question": "What prize did Binyavanga Wainaina win for his story 'Discovering Home' in 2002?",
+      "predicted": "Information not found",
+      "gold": "Caine Prize for African Writing",
+      "similarity": 0.34615384615384615
+    },
+    {
+      "question": "In what year was Abdulrazak Gurnah's novel 'Paradise' shortlisted for the Booker Prize?",
+      "predicted": "Information not found",
+      "gold": "1994",
+      "similarity": 0.0
     }
   ]
 }

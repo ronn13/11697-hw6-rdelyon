@@ -257,15 +257,9 @@ Question: {question}
 
 Instructions:
 - Answer based ONLY on the information in the context documents
-- Be concise and specific
-- For multiple choice questions, provide only the answer (year, name, or title)
-- For list questions, provide items separated by tabs (no bullets or numbers)
-- For factoid questions, provide a brief direct answer
+- Be concise and specific.
+- Provide only the answer (e.g., a year, a name, a title, or a tab-separated list).
 - If the answer is not in the context, say "Information not found"
-- For complex topics, break answers into sections (e.g., Themes, Context, Influence, Examples).
-- Define key terms when they appear (e.g., “Ugandan literary renaissance”, “Apole line in Somali poetry”).
-- Provide short reading recommendations when helpful.
-- Use neutral, academic-but-accessible tone.
 - Avoid overly generalized statements; focus on specifics tied to East Africa.
 
 Answer:"""
@@ -308,8 +302,8 @@ Answer:"""
                     for doc in source_docs:
                         filename = doc.metadata.get('filename', 'unknown')
                         score = doc.metadata.get('score', 1.0) # Default to 1.0 if score not present
-                        # For FAISS, score is distance, so we convert to similarity
-                        if isinstance(self.qa_chain.retriever, FAISS.as_retriever().__class__):
+                        # For vector retrievers (like FAISS), score is distance, so convert to similarity
+                        if hasattr(qa_chain.retriever, 'vectorstore'):
                             score = 1 / (1 + score)
                         doc_info.append(f"{filename}:{score:.4f}")
                     additional_info = "|".join(doc_info)

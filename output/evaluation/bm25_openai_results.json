@@ -1,11 +1,11 @@
 {
   "total": 100,
-  "exact_match": 44,
-  "partial_match": 39,
-  "no_match": 17,
-  "exact_match_rate": 0.44,
-  "partial_match_rate": 0.39,
-  "any_match_rate": 0.83,
+  "exact_match": 55,
+  "partial_match": 33,
+  "no_match": 12,
+  "exact_match_rate": 0.55,
+  "partial_match_rate": 0.33,
+  "any_match_rate": 0.88,
   "errors": [
     {
       "question": "In which year was the first book of Barbara Kimenye's 'Moses' series published?",
@@ -21,9 +21,9 @@
     },
     {
       "question": "What was the title of Ngugi wa Thiong'o's novel written in Gikuyu language while he was detained?",
-      "predicted": "The title of Ngugi wa Thiong'o's novel written in Gikuyu language while he was detained is 'Devil on the Cross'.",
+      "predicted": "Devil on the Cross",
       "gold": "Matigari",
-      "similarity": 0.10344827586206896
+      "similarity": 0.15384615384615385
     },
     {
       "question": "In what year did Meja Mwangi publish his novel 'Going Down River Road'?",
@@ -32,40 +32,40 @@
       "similarity": 0.75
     },
     {
-      "question": "In what year was Ngugi wa Thiong'o's book 'Decolonising the Mind' published?",
-      "predicted": "Information not found.",
-      "gold": "1986",
-      "similarity": 0.0
-    },
-    {
       "question": "What is the title of Meja Mwangi's debut novel, published in 1974?",
-      "predicted": "Information not found",
+      "predicted": "Carcase for Hounds",
       "gold": "Going Down River Road",
-      "similarity": 0.3333333333333333
+      "similarity": 0.3076923076923077
     },
     {
       "question": "List books by Meja Mwangi that depict Nairobi's street children",
-      "predicted": "Kill Me Quick Going Down River Road The Cockroach Dance",
+      "predicted": "Kill Me Quick    Going Down River Road    The Cockroach Dance",
       "gold": "'Kill Me Quick' (1973)",
       "similarity": 0.37333333333333335
     },
     {
-      "question": "What are some notable novels by Ugandan women writers?",
-      "predicted": "Information not found",
-      "gold": "Kintu",
-      "similarity": 0.3076923076923077
-    },
-    {
       "question": "What are some notable novel titles by Abdulrazak Gurnah?",
-      "predicted": "Paradise The By-pass Dottie",
+      "predicted": "Paradise, The By-pass, Dottie",
       "gold": "Memory of Departure",
-      "similarity": 0.17391304347826086
+      "similarity": 0.16666666666666666
     },
     {
       "question": "What is the title of Ngugi wa Thiong'o's semi-autobiographical novel?",
-      "predicted": "The title of Ngugi wa Thiong'o's semi-autobiographical novel is \"Dreams in a Time of War.\"",
+      "predicted": "\"Dreams in a Time of War\"",
       "gold": "Caitaani Muthoni",
-      "similarity": 0.09803921568627451
+      "similarity": 0.15384615384615385
+    },
+    {
+      "question": "In what year was Okot p'Bitek's most famous work 'Song of Lawino' published?",
+      "predicted": "1966",
+      "gold": "1965",
+      "similarity": 0.75
+    },
+    {
+      "question": "In what year was Meja Mwangi's novel 'Going Down River Road' published?",
+      "predicted": "1976",
+      "gold": "1973",
+      "similarity": 0.75
     }
   ]
 }

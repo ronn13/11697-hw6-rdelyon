@@ -1,11 +1,11 @@
 {
   "total": 100,
-  "exact_match": 4,
-  "partial_match": 30,
-  "no_match": 66,
-  "exact_match_rate": 0.04,
-  "partial_match_rate": 0.3,
-  "any_match_rate": 0.34,
+  "exact_match": 28,
+  "partial_match": 18,
+  "no_match": 54,
+  "exact_match_rate": 0.28,
+  "partial_match_rate": 0.18,
+  "any_match_rate": 0.46,
   "errors": [
     {
       "question": "In which year was the first book of Barbara Kimenye's 'Moses' series published?",
@@ -26,39 +26,9 @@
       "similarity": 0.0
     },
     {
-      "question": "In which year did Meja Mwangi publish his breakthrough novel 'Kill Me Quick'?",
-      "predicted": "Information not found",
-      "gold": "1973",
-      "similarity": 0.0
-    },
-    {
-      "question": "In which year was Abdulrazak Gurnah's novel 'Paradise' shortlisted for the Booker Prize?",
-      "predicted": "Information not found",
-      "gold": "1994",
-      "similarity": 0.0
-    },
-    {
-      "question": "In what year did Binyavanga Wainaina win the Caine Prize for African Writing?",
-      "predicted": "Information not found.",
-      "gold": "2002",
-      "similarity": 0.0
-    },
-    {
-      "question": "In what year did Grace Ogot's novel 'The Promised Land' appear?",
-      "predicted": "Information not found",
-      "gold": "1966",
-      "similarity": 0.0
-    },
-    {
       "question": "In what year did Grace Ogot's short story collection 'Land Without Thunder' establish her reputation for powerful narratives rooted in African cosmology?",
       "predicted": "Information not found",
       "gold": "1963",
-      "similarity": 0.0
-    },
-    {
-      "question": "What year was Abdulrazak Gurnah's novel 'Paradise' shortlisted for the Booker Prize?",
-      "predicted": "Information not found",
-      "gold": "1994",
       "similarity": 0.0
     },
     {
@@ -66,6 +36,36 @@
       "predicted": "Information not found",
       "gold": "Ngugi wa Thiong'o",
       "similarity": 0.3783783783783784
+    },
+    {
+      "question": "In what year did Penina Mlama write her play 'Hatia' (Guilt)?",
+      "predicted": "Information not found",
+      "gold": "1972",
+      "similarity": 0.0
+    },
+    {
+      "question": "In what year was Yolande Mukagasana's autobiographical work 'La Mort ne veut pas de moi' published?",
+      "predicted": "Information not found",
+      "gold": "1997",
+      "similarity": 0.0
+    },
+    {
+      "question": "What was the title of Ngugi wa Thiong'o's novel written in Gikuyu language while he was detained?",
+      "predicted": "Devil on the Cross",
+      "gold": "Matigari",
+      "similarity": 0.15384615384615385
+    },
+    {
+      "question": "What prize did Binyavanga Wainaina win for his story 'Discovering Home' in 2002?",
+      "predicted": "Information not found",
+      "gold": "Caine Prize for African Writing",
+      "similarity": 0.34615384615384615
+    },
+    {
+      "question": "In what year was Abdulrazak Gurnah's novel 'Paradise' shortlisted for the Booker Prize?",
+      "predicted": "Information not found",
+      "gold": "1994",
+      "similarity": 0.0
     }
   ]
 }

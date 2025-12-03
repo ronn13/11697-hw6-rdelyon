@@ -1,11 +1,11 @@
 {
   "total": 100,
-  "exact_match": 45,
-  "partial_match": 39,
-  "no_match": 16,
-  "exact_match_rate": 0.45,
-  "partial_match_rate": 0.39,
-  "any_match_rate": 0.84,
+  "exact_match": 55,
+  "partial_match": 32,
+  "no_match": 13,
+  "exact_match_rate": 0.55,
+  "partial_match_rate": 0.32,
+  "any_match_rate": 0.87,
   "errors": [
     {
       "question": "In which year was the first book of Barbara Kimenye's 'Moses' series published?",
@@ -32,40 +32,40 @@
       "similarity": 0.75
     },
     {
-      "question": "In what year was Ngugi wa Thiong'o's book 'Decolonising the Mind' published?",
-      "predicted": "Information not found",
-      "gold": "1986",
-      "similarity": 0.0
-    },
-    {
       "question": "What is the title of Meja Mwangi's debut novel, published in 1974?",
       "predicted": "Carcase for Hounds",
       "gold": "Going Down River Road",
       "similarity": 0.3076923076923077
     },
     {
-      "question": "List books by Meja Mwangi that depict Nairobi's street children",
-      "predicted": "Meja Mwangi's books that depict Nairobi's street children are:  Kill Me Quick",
-      "gold": "'Kill Me Quick' (1973)",
-      "similarity": 0.2765957446808511
+      "question": "What are some notable works by Ugandan authors?",
+      "predicted": "Okot p'Bitek - Song of Lawino, Song of Ocol, Song of a Prisoner, Song of Malaya, White Teeth  Barbara Kimenye - Moses series, Kalasanda, Kalasanda Revisited  Kakwenza Rukirabasaija - satirical novels  Doreen Baingana - novels  Beatrice Lamwaka - novels  Moses Isegawa - Abyssinian Chronicles  Jennifer Makumbi - Kintu",
+      "gold": "'Song of Lawino' (1966)",
+      "similarity": 0.09063444108761329
     },
     {
       "question": "What are some notable novel titles by Abdulrazak Gurnah?",
-      "predicted": "Notable novel titles by Abdulrazak Gurnah mentioned in the context documents are:  Paradise  The By-pass  Dottie",
+      "predicted": "Paradise, The By-pass, Dottie",
       "gold": "Memory of Departure",
-      "similarity": 0.171875
+      "similarity": 0.16666666666666666
     },
     {
       "question": "What is the title of Ngugi wa Thiong'o's semi-autobiographical novel?",
-      "predicted": "The memoir trilogy by Ngugi wa Thiong'o includes 'Dreams in a Time of War,' 'In the House of the Interpreter,' and 'Birth of a Dream Weaver.'",
+      "predicted": "Dreams in a Time of War",
       "gold": "Caitaani Muthoni",
-      "similarity": 0.06666666666666667
+      "similarity": 0.15384615384615385
     },
     {
-      "question": "What are some specific book titles written by Meja Mwangi?",
-      "predicted": "Meja Mwangi's novels critiquing neocolonialism and corruption include:  Mwafaka Passbook Going Down River Road Till the Lion Comes",
-      "gold": "Kill Me Quick",
-      "similarity": 0.1276595744680851
+      "question": "What are some notable book titles by Abdulrazak Gurnah?",
+      "predicted": "Paradise, The By-pass, Dottie",
+      "gold": "Memory of Departure",
+      "similarity": 0.16666666666666666
+    },
+    {
+      "question": "In what year was Okot p'Bitek's most famous work 'Song of Lawino' published?",
+      "predicted": "1966",
+      "gold": "1965",
+      "similarity": 0.75
     }
   ]
 }
