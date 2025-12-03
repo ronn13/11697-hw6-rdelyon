@@ -7,6 +7,7 @@ import argparse
 import os
 from typing import List, Tuple
 import difflib
+import json
 
 
 def load_tsv(filepath: str) -> List[str]:
@@ -117,64 +118,107 @@ def load_questions(filepath: str) -> List[str]:
                 questions.append(parts[0])
     return questions
 
-
 def main():
-    parser = argparse.ArgumentParser(description='Evaluate QA predictions')
-    parser.add_argument('--predictions', type=str, required=True,
-                        help='Path to predictions TSV file')
-    parser.add_argument('--answers', type=str, default='answer.tsv',
+    parser = argparse.ArgumentParser(description='Evaluate QA predictions from a directory')
+    parser.add_argument('--prediction_dir', type=str, default='output/prediction',
+                        help='Path to the directory containing prediction TSV files. Defaults to output/prediction.')
+    parser.add_argument('--answers', type=str, default='data/answer.tsv',
                         help='Path to gold answers TSV file')
-    parser.add_argument('--questions', type=str, default='question.tsv',
+    parser.add_argument('--questions', type=str, default='data/question.tsv',
                         help='Path to questions TSV file (optional)')
-    parser.add_argument('--output', type=str, default=None,
-                        help='Path to save evaluation results')
+    parser.add_argument('--output_dir', type=str, default='output/evaluation',
+                        help='Path to save evaluation results JSON files. Defaults to output/evaluation.')
     
     args = parser.parse_args()
     
-    # Load data
-    print(f"Loading predictions from {args.predictions}...")
-    predictions = load_tsv(args.predictions)
+    prediction_dir = args.prediction_dir
+    output_dir = args.output_dir
     
+    # 1. Load gold data once
     print(f"Loading answers from {args.answers}...")
-    answers = load_tsv(args.answers)
-    
+    try:
+        answers = load_tsv(args.answers)
+    except FileNotFoundError:
+        print(f"Error: Gold answers file not found at {args.answers}. Exiting.")
+        return
+
     questions = None
     if os.path.exists(args.questions):
         print(f"Loading questions from {args.questions}...")
         questions = load_questions(args.questions)
     
-    # Evaluate
-    print("\nEvaluating...")
-    results = evaluate_predictions(predictions, answers, questions)
+    # 2. Ensure output directory exists
+    if output_dir and not os.path.exists(output_dir):
+        os.makedirs(output_dir)
+        print(f"Created output directory: {output_dir}")
+        
+    # 3. Find prediction files
+    if not os.path.exists(prediction_dir):
+        print(f"Error: Prediction directory not found at {prediction_dir}. Exiting.")
+        return
+        
+    # Filter for .tsv files that are actual files
+    prediction_files = [f for f in os.listdir(prediction_dir) if f.endswith('.tsv') and os.path.isfile(os.path.join(prediction_dir, f))]
     
-    # Print results
-    print("\n" + "="*60)
-    print("EVALUATION RESULTS")
-    print("="*60)
-    print(f"Total questions: {results['total']}")
-    print(f"Exact matches: {results['exact_match']} ({results['exact_match_rate']:.2%})")
-    print(f"Partial matches: {results['partial_match']} ({results['partial_match_rate']:.2%})")
-    print(f"No matches: {results['no_match']}")
-    print(f"Any match rate: {results['any_match_rate']:.2%}")
-    print("="*60)
-    
-    # Show some errors
-    if results['errors']:
-        print("\nSample Errors (first 10):")
-        print("-"*60)
-        for i, error in enumerate(results['errors'], 1):
-            print(f"\n{i}. Question: {error['question'][:80]}...")
-            print(f"   Predicted: {error['predicted'][:80]}")
-            print(f"   Gold:      {error['gold'][:80]}")
-            print(f"   Similarity: {error['similarity']:.2f}")
-    
-    # Save results if requested
-    if args.output:
-        import json
-        with open(args.output, 'w', encoding='utf-8') as f:
-            json.dump(results, f, indent=2, ensure_ascii=False)
-        print(f"\nResults saved to {args.output}")
+    if not prediction_files:
+        print(f"Error: No .tsv prediction files found in {prediction_dir}. Exiting.")
+        return
 
+    print(f"\nFound {len(prediction_files)} prediction file(s) to evaluate in {prediction_dir}.")
+
+    # 4. Loop through each prediction file and evaluate
+    for pred_filename in sorted(prediction_files):
+        pred_filepath = os.path.join(prediction_dir, pred_filename)
+        # Use the filename (without extension) as the model identifier
+        model_name = os.path.splitext(pred_filename)[0]
+
+        print("\n" + "#"*60)
+        print(f"STARTING EVALUATION FOR: {pred_filename}")
+        print("#"*60)
+
+        try:
+            # Load predictions
+            print(f"Loading predictions from {pred_filepath}...")
+            predictions = load_tsv(pred_filepath)
+        except Exception as e:
+            print(f"Could not load predictions from {pred_filepath}: {e}. Skipping.")
+            continue
+            
+        # Evaluate
+        print("\nEvaluating...")
+        results = evaluate_predictions(predictions, answers, questions)
+        
+        # Print results
+        print("\n" + "="*60)
+        print(f"EVALUATION RESULTS FOR {model_name}")
+        print("="*60)
+        print(f"Total questions: {results['total']}")
+        print(f"Exact matches: {results['exact_match']} ({results['exact_match_rate']:.2%})")
+        print(f"Partial matches: {results['partial_match']} ({results['partial_match_rate']:.2%})")
+        print(f"No matches: {results['no_match']}")
+        print(f"Any match rate: {results['any_match_rate']:.2%}")
+        print("="*60)
+        
+        # Show some errors
+        if results['errors']:
+            print("\nSample Errors (first 10):")
+            print("-"*60)
+            for i, error in enumerate(results['errors'], 1):
+                print(f"\n{i}. Question: {error['question'][:80]}...")
+                print(f"   Predicted: {error['predicted'][:80]}")
+                print(f"   Gold:      {error['gold'][:80]}")
+                print(f"   Similarity: {error['similarity']:.2f}")
+        
+        # Save results
+        if output_dir:
+            output_file = os.path.join(output_dir, f'{model_name}_results.json')
+            with open(output_file, 'w', encoding='utf-8') as f:
+                json.dump(results, f, indent=2, ensure_ascii=False)
+            print(f"\nResults saved to {output_file}")
+            
+    print("\n" + "="*60)
+    print("ALL EVALUATIONS COMPLETE")
+    print("="*60)
 
 if __name__ == "__main__":
     main()

@@ -1,0 +1,71 @@
+{
+  "total": 100,
+  "exact_match": 45,
+  "partial_match": 39,
+  "no_match": 16,
+  "exact_match_rate": 0.45,
+  "partial_match_rate": 0.39,
+  "any_match_rate": 0.84,
+  "errors": [
+    {
+      "question": "In which year was the first book of Barbara Kimenye's 'Moses' series published?",
+      "predicted": "1968",
+      "gold": "1967",
+      "similarity": 0.75
+    },
+    {
+      "question": "In what year did Grace Ogot's short story collection 'Land Without Thunder' establish her reputation for powerful narratives rooted in African cosmology?",
+      "predicted": "1968",
+      "gold": "1963",
+      "similarity": 0.75
+    },
+    {
+      "question": "What was the title of Ngugi wa Thiong'o's novel written in Gikuyu language while he was detained?",
+      "predicted": "Devil on the Cross",
+      "gold": "Matigari",
+      "similarity": 0.15384615384615385
+    },
+    {
+      "question": "In what year did Meja Mwangi publish his novel 'Going Down River Road'?",
+      "predicted": "1976",
+      "gold": "1975",
+      "similarity": 0.75
+    },
+    {
+      "question": "In what year was Ngugi wa Thiong'o's book 'Decolonising the Mind' published?",
+      "predicted": "Information not found",
+      "gold": "1986",
+      "similarity": 0.0
+    },
+    {
+      "question": "What is the title of Meja Mwangi's debut novel, published in 1974?",
+      "predicted": "Carcase for Hounds",
+      "gold": "Going Down River Road",
+      "similarity": 0.3076923076923077
+    },
+    {
+      "question": "List books by Meja Mwangi that depict Nairobi's street children",
+      "predicted": "Meja Mwangi's books that depict Nairobi's street children are:  Kill Me Quick",
+      "gold": "'Kill Me Quick' (1973)",
+      "similarity": 0.2765957446808511
+    },
+    {
+      "question": "What are some notable novel titles by Abdulrazak Gurnah?",
+      "predicted": "Notable novel titles by Abdulrazak Gurnah mentioned in the context documents are:  Paradise  The By-pass  Dottie",
+      "gold": "Memory of Departure",
+      "similarity": 0.171875
+    },
+    {
+      "question": "What is the title of Ngugi wa Thiong'o's semi-autobiographical novel?",
+      "predicted": "The memoir trilogy by Ngugi wa Thiong'o includes 'Dreams in a Time of War,' 'In the House of the Interpreter,' and 'Birth of a Dream Weaver.'",
+      "gold": "Caitaani Muthoni",
+      "similarity": 0.06666666666666667
+    },
+    {
+      "question": "What are some specific book titles written by Meja Mwangi?",
+      "predicted": "Meja Mwangi's novels critiquing neocolonialism and corruption include:  Mwafaka Passbook Going Down River Road Till the Lion Comes",
+      "gold": "Kill Me Quick",
+      "similarity": 0.1276595744680851
+    }
+  ]
+}

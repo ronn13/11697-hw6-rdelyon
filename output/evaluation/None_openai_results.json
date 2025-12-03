@@ -1,0 +1,71 @@
+{
+  "total": 100,
+  "exact_match": 4,
+  "partial_match": 30,
+  "no_match": 66,
+  "exact_match_rate": 0.04,
+  "partial_match_rate": 0.3,
+  "any_match_rate": 0.34,
+  "errors": [
+    {
+      "question": "In which year was the first book of Barbara Kimenye's 'Moses' series published?",
+      "predicted": "Information not found",
+      "gold": "1967",
+      "similarity": 0.0
+    },
+    {
+      "question": "In what year did Grace Ogot's short story 'The Year of Sacrifice' appear in Black Orpheus?",
+      "predicted": "Information not found",
+      "gold": "1963",
+      "similarity": 0.0
+    },
+    {
+      "question": "In what year was Yolande Mukagasana's autobiographical book 'La Mort ne veut pas de moi' published?",
+      "predicted": "Information not found",
+      "gold": "1997",
+      "similarity": 0.0
+    },
+    {
+      "question": "In which year did Meja Mwangi publish his breakthrough novel 'Kill Me Quick'?",
+      "predicted": "Information not found",
+      "gold": "1973",
+      "similarity": 0.0
+    },
+    {
+      "question": "In which year was Abdulrazak Gurnah's novel 'Paradise' shortlisted for the Booker Prize?",
+      "predicted": "Information not found",
+      "gold": "1994",
+      "similarity": 0.0
+    },
+    {
+      "question": "In what year did Binyavanga Wainaina win the Caine Prize for African Writing?",
+      "predicted": "Information not found.",
+      "gold": "2002",
+      "similarity": 0.0
+    },
+    {
+      "question": "In what year did Grace Ogot's novel 'The Promised Land' appear?",
+      "predicted": "Information not found",
+      "gold": "1966",
+      "similarity": 0.0
+    },
+    {
+      "question": "In what year did Grace Ogot's short story collection 'Land Without Thunder' establish her reputation for powerful narratives rooted in African cosmology?",
+      "predicted": "Information not found",
+      "gold": "1963",
+      "similarity": 0.0
+    },
+    {
+      "question": "What year was Abdulrazak Gurnah's novel 'Paradise' shortlisted for the Booker Prize?",
+      "predicted": "Information not found",
+      "gold": "1994",
+      "similarity": 0.0
+    },
+    {
+      "question": "Which writer shifted to writing in the Gikuyu language?",
+      "predicted": "Information not found",
+      "gold": "Ngugi wa Thiong'o",
+      "similarity": 0.3783783783783784
+    }
+  ]
+}

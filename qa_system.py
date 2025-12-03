@@ -29,7 +29,7 @@ class DocumentStore:
     
     def __init__(self, doc_dir: str = "corpus"):
         self.doc_dir = doc_dir
-        self.documents = []
+        self.split_documents = []
         self.load_documents()
     
     def load_documents(self):
@@ -46,20 +46,30 @@ class DocumentStore:
                 loader_cls=TextLoader,
                 loader_kwargs={'encoding': 'utf-8'}
             )
-            self.documents = loader.load()
+            documents = loader.load()
             
-            # Add metadata with just filename
-            for doc in self.documents:
+            # Add metadata and split documents
+            text_splitter = RecursiveCharacterTextSplitter(
+                chunk_size=1000,
+                chunk_overlap=200,
+                length_function=len,
+                is_separator_regex=False,
+            )
+            
+            for doc in documents:
                 filename = os.path.basename(doc.metadata.get('source', 'unknown'))
                 doc.metadata['filename'] = filename
+                # Split document and add to the list
+                chunks = text_splitter.split_documents([doc])
+                self.split_documents.extend(chunks)
             
-            print(f"Loaded {len(self.documents)} documents from {self.doc_dir}")
+            print(f"Loaded and split {len(documents)} documents into {len(self.split_documents)} chunks from {self.doc_dir}")
             
         except Exception as e:
             print(f"Error loading documents: {e}")
     
     def get_documents(self) -> List[Document]:
-        return self.documents
+        return self.split_documents
 
 
 class VectorStoreRetriever:
@@ -83,7 +93,7 @@ class VectorStoreRetriever:
             self.vectorstore = FAISS.from_documents(self.documents, self.embeddings)
             
             # Create retriever
-            self.retriever = self.vectorstore.as_retriever(search_kwargs={"k": 3})
+            self.retriever = self.vectorstore.as_retriever(search_kwargs={"k": 5})
             print("Vector store created successfully")
     
     def get_retriever(self):
@@ -118,7 +128,7 @@ class LangChainBM25Retriever:
         if documents:
             print("Creating BM25 retriever...")
             self.retriever = BM25Retriever.from_documents(documents)
-            self.retriever.k = 3
+            self.retriever.k = 5
             print("BM25 retriever created successfully")
     
     def get_retriever(self):
@@ -128,13 +138,14 @@ class LangChainBM25Retriever:
         """Retrieve documents (BM25 doesn't provide scores in LangChain)"""
         if not self.retriever:
             return []
-        
-        docs = self.retriever.get_relevant_documents(query)[:top_k]
+
+        self.retriever.k = top_k
+        docs = self.retriever.get_relevant_documents(query)
         
         results = []
         for i, doc in enumerate(docs):
             filename = doc.metadata.get('filename', 'unknown')
-            # BM25 doesn't provide scores, use rank-based pseudo-score
+            # BM25 in langchain doesn't provide scores, use rank-based pseudo-score
             pseudo_score = 1.0 - (i * 0.1)
             results.append((filename, doc.page_content, pseudo_score))
         
@@ -230,17 +241,10 @@ Context Documents:
 Question: {question}
 
 Instructions:
-- Answer based ONLY on the information in the context documents
+- Answer the question based on your internal knowledge.
 - Be concise and specific
-- For multiple choice questions, provide only the answer (year, name, or title)
-- For list questions, provide items separated by tabs (no bullets or numbers)
-- For factoid questions, provide a brief direct answer
-- If the answer is not in the context, say "Information not found"
-- For complex topics, break answers into sections (e.g., Themes, Context, Influence, Examples).
-- Define key terms when they appear (e.g., “Ugandan literary renaissance”, “Apole line in Somali poetry”).
-- Provide short reading recommendations when helpful.
-- Use neutral, academic-but-accessible tone.
-- Avoid overly generalized statements; focus on specifics tied to East Africa.
+- Provide only the answer (e.g., a year, a name, a title, or a tab-separated list).
+- If you do not know the answer, say "Information not found".
 
 Answer:"""
         )
@@ -303,7 +307,11 @@ Answer:"""
                     doc_info = []
                     for doc in source_docs:
                         filename = doc.metadata.get('filename', 'unknown')
-                        doc_info.append(f"{filename}:1.0000")
+                        score = doc.metadata.get('score', 1.0) # Default to 1.0 if score not present
+                        # For FAISS, score is distance, so we convert to similarity
+                        if isinstance(self.qa_chain.retriever, FAISS.as_retriever().__class__):
+                            score = 1 / (1 + score)
+                        doc_info.append(f"{filename}:{score:.4f}")
                     additional_info = "|".join(doc_info)
                 else:
                     additional_info = None
